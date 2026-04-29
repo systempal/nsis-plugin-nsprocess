@@ -1,10 +1,10 @@
 # nsProcess NSIS Plugin v1.6
 
-**Versione personale modificata**
+**Personal modified version**
 
 ---
 
-## Descrizione Originale
+## Original Description
 
 **2006 Shengalts Aleksander aka Instructor (Shengalts@mail.ru)**
 
@@ -119,61 +119,65 @@ Include `nsProcess.nsh` to use the macros:
 
 ---
 
-## ⚠️ Differenze nella versione personale
+## ⚠️ Differences in the Personal Version
 
-### Nuova architettura supportata: x64 (amd64-unicode)
+### New supported architecture: x64 (amd64-unicode)
 
-L'originale supportava solo:
+The original supported only:
 - x86-ansi (Plugins\nsProcess.dll)
-- x86-unicode (nsProcessW.dll da rinominare in nsProcess.dll)
+- x86-unicode (nsProcessW.dll renamed to nsProcess.dll)
 
-La versione personale aggiunge il supporto per:
+The personal version adds support for:
 - **amd64-unicode** (x64)
 
-### Progetto Visual Studio
+### Visual Studio Project
 
-L'originale includeva:
-- `Source/nsProcess.sln` - Solution VS2008
-- `Source/nsProcess.vcproj` - Progetto VS2008 (solo x86)
+The original included:
+- `Source/nsProcess.sln` - VS2008 Solution
+- `Source/nsProcess.vcproj` - VS2008 Project (x86 only)
 
-La versione personale converte a VS2022 con supporto x64:
-- `nsProcess.sln` - Solution VS2022
-- `nsProcess/nsProcess.vcxproj` - Progetto VS2022 (x86-ansi, x86-unicode, amd64-unicode)
+The personal version upgrades to VS2022 with x64 support:
+- `nsProcess.sln` - VS2022 Solution
+- `nsProcess/nsProcess.vcxproj` - VS2022 Project (x86-ansi, x86-unicode, amd64-unicode)
 
-### File aggiunti
+### Added Files
 
-- `build_plugin.py` - Script Python per compilare il plugin per tutte le architetture
-- `nsis/` - Cartella con gli header NSIS per la compilazione:
+- `build_plugin.py` - Python script to compile the plugin for all architectures
+- `nsis/` - Folder with NSIS headers for compilation:
   - `api.h`, `crt.c`, `nsis_tchar.h`, `pluginapi.c`, `pluginapi.h`
 
-### File rimossi
+### Removed Files
 
-I file DLL precompilati sono stati rimossi dalla distribuzione:
+Pre-compiled DLL files have been removed from the distribution:
 
 - `Plugins/nsProcess.dll` (x86 ANSI)
 - `nsProcessW.dll` (x86 UNICODE)
 
-### Compilazione
+### Build
 
 ```cmd
 cd nsProcess
 python build_plugin.py
 ```
 
-I DLL vengono copiati in `plugins/{platform}/nsProcess.dll`.
+DLLs are copied to `plugins/{platform}/nsProcess.dll`.
 
-### Opzioni build
+### Build Options
 
 ```powershell
-python build_plugin.py --config x86-unicode      # Solo un'architettura (x86-ansi|x86-unicode|amd64-unicode|all)
-python build_plugin.py --toolset 2026            # Toolset specifico (2022|2026|auto)
-python build_plugin.py --jobs 4                  # Numero di job MSBuild paralleli (default: CPU count)
-python build_plugin.py --clean                   # Pulizia dist/ prima della build
-python build_plugin.py --install-dir "C:\NSIS\Plugins"  # Copia in directory NSIS aggiuntiva
-python build_plugin.py --verbose                 # Output MSBuild esteso
-python build_plugin.py --version                 # Stampa versione ed esce
+python build_plugin.py --config x86-unicode      # Single architecture (x86-ansi|x86-unicode|amd64-unicode|all)
+python build_plugin.py --toolset 2026            # Specific toolset (2022|2026|auto)
+python build_plugin.py --jobs 4                  # Number of parallel MSBuild jobs (default: CPU count)
+python build_plugin.py --clean                   # Clean dist/ before build
+python build_plugin.py --install-dir "C:\NSIS\Plugins"  # Copy to additional NSIS directory
+python build_plugin.py --verbose                 # Extended MSBuild output
+python build_plugin.py --version                 # Print version and exit
 ```
 
-### Modifiche funzionali
+### Functional Changes
 
-Nessuna modifica funzionale rispetto all'originale. Le modifiche riguardano solo l'infrastruttura di build e il supporto x64.
+No functional changes compared to the original. Modifications are limited to the build infrastructure and x64 support.
+
+---
+
+*See [README_IT.md](README_IT.md) for the Italian version.*
