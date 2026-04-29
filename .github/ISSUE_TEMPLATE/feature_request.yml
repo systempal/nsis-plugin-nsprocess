@@ -1,0 +1,32 @@
+name: Feature Request
+description: Suggerisci una nuova funzionalità o miglioramento
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema / Caso d'uso
+      description: Quale problema vorresti risolvere? Quale workflow vuoi abilitare?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposta
+      description: Come dovrebbe funzionare? Includi esempio di API/uso negli script NSIS se possibile.
+      render: nsis
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative considerate
+      description: Altri approcci che hai valutato e perché sono stati scartati
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Note aggiuntive

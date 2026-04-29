@@ -1,0 +1,52 @@
+# Normalizzazione line endings
+* text=auto eol=lf
+
+# File di codice
+*.c       text eol=lf
+*.cpp     text eol=lf
+*.h       text eol=lf
+*.hpp     text eol=lf
+*.def     text eol=lf
+*.py      text eol=lf
+*.ps1     text eol=lf
+*.cmd     text eol=crlf
+*.bat     text eol=crlf
+
+# NSIS
+*.nsi     text eol=crlf
+*.nsh     text eol=crlf
+
+# Markdown / docs / config
+*.md      text eol=lf
+*.yml     text eol=lf
+*.yaml    text eol=lf
+*.json    text eol=lf
+*.txt     text eol=lf
+*.xml     text eol=lf
+
+# Visual Studio (CRLF richiesto)
+*.sln       text eol=crlf
+*.vcxproj   text eol=crlf merge=union
+*.filters   text eol=crlf merge=union
+*.rc        binary
+*.rc2       binary
+
+# Binari
+*.dll     binary
+*.exe     binary
+*.lib     binary
+*.obj     binary
+*.pdb     binary
+*.zip     binary
+*.7z      binary
+*.png     binary
+*.ico     binary
+*.gif     binary
+*.jpg     binary
+*.jpeg    binary
+*.bmp     binary
+*.pdf     binary
+
+# Linguistic detection (GitHub Linguist / Gitea analogo)
+*.nsi   linguist-language=NSIS
+*.nsh   linguist-language=NSIS

@@ -1,0 +1,63 @@
+# Build (GitHub) — pipeline CI primaria
+#
+# Strategia hosting:
+#   - Repo primario su Gitea (push iniziale)
+#   - Push mirror automatico Gitea -> GitHub
+#   - GitHub esegue TUTTA la CI (Gitea non esegue Actions)
+#
+# Trigger:
+#   - push su main (incluso quello propagato dal mirror Gitea)
+#   - PR aperte su GitHub
+#   - run manuale via UI
+
+name: Build
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'examples/**'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [x86-ansi, x86-unicode, x64-unicode]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Read VERSION
+        id: version
+        shell: pwsh
+        run: |
+          $v = (Get-Content VERSION -Raw).Trim()
+          "version=$v" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Build ${{ matrix.config }}
+        run: python build_plugin.py --config ${{ matrix.config }} --verbose
+
+      - name: Upload DLL
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}-${{ steps.version.outputs.version }}-${{ matrix.config }}
+          path: dist/**
+          if-no-files-found: error
+          retention-days: 30

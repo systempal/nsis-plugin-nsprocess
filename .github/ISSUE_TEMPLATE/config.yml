@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Domande generali
+    url: https://gitea.emulab.it/Simone/nsis-plugin-nsprocess/issues?type=question
+    about: Per domande di utilizzo che non sono bug, apri una issue con label "question"
+  - name: Security
+    url: https://gitea.emulab.it/Simone/nsis-plugin-nsprocess/security/advisories/new
+    about: Segnala vulnerabilità di security in privato (non aprire issue pubbliche)

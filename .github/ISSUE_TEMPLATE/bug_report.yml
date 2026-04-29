@@ -1,0 +1,76 @@
+name: Bug Report
+description: Segnala un bug riproducibile
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Grazie per la segnalazione. Compila i campi sotto per aiutarci a riprodurre il problema.
+
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Versione plugin
+      description: Contenuto del file VERSION o tag della release scaricata
+      placeholder: "1.6.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: architecture
+    attributes:
+      label: Architettura DLL usata
+      options:
+        - x86-ansi
+        - x86-unicode
+        - amd64-unicode
+        - non so / multiple
+    validations:
+      required: true
+
+  - type: input
+    id: nsis-version
+    attributes:
+      label: Versione NSIS
+      placeholder: "3.10"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Sistema operativo
+      placeholder: "Windows 11 23H2 x64"
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Passi per riprodurre
+      description: Script .nsi minimale che riproduce il problema
+      render: nsis
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento atteso
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Comportamento osservato
+      description: Includi messaggi di errore esatti, output del log NSIS, screenshot
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Note aggiuntive
+      description: Qualunque altra informazione utile (workaround tentati, ecc.)

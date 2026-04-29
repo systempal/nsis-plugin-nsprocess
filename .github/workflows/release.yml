@@ -1,0 +1,99 @@
+# Release (GitHub) — pipeline release primaria
+#
+# Triggerata quando un tag v* viene propagato dal mirror Gitea.
+# Costruisce gli artifact per tutte le architetture e crea la GitHub Release.
+
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag versione (es. v1.7.0)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        config: [x86-ansi, x86-unicode, x64-unicode]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - uses: microsoft/setup-msbuild@v2
+
+      - name: Build ${{ matrix.config }}
+        run: python build_plugin.py --config ${{ matrix.config }}
+
+      - name: Determine version & arch
+        id: meta
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          if ([string]::IsNullOrEmpty($tag) -or $tag -eq "main") { $tag = "${{ inputs.tag }}" }
+          $v = $tag -replace '^v',''
+          $map = @{ 'x86-ansi' = 'x86-ansi'; 'x86-unicode' = 'x86-unicode'; 'x64-unicode' = 'amd64-unicode' }
+          $dir = $map['${{ matrix.config }}']
+          echo "version=$v" >> $env:GITHUB_OUTPUT
+          echo "tag=$tag"   >> $env:GITHUB_OUTPUT
+          echo "dir=$dir"   >> $env:GITHUB_OUTPUT
+
+      - name: Package
+        shell: pwsh
+        run: |
+          $name = "${{ github.event.repository.name }}-${{ steps.meta.outputs.version }}-${{ steps.meta.outputs.dir }}"
+          $stage = "stage/$name"
+          New-Item -ItemType Directory -Force -Path $stage | Out-Null
+          Copy-Item "dist/${{ steps.meta.outputs.dir }}/*" $stage -Recurse
+          Copy-Item README.md, LICENSE, VERSION, CHANGELOG.md $stage
+          if (Test-Path "include")  { Copy-Item "include"  $stage -Recurse }
+          if (Test-Path "examples") { Copy-Item "examples" $stage -Recurse }
+          Compress-Archive -Path "$stage/*" -DestinationPath "$name.zip" -Force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pkg-${{ matrix.config }}
+          path: '*.zip'
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: SHA256SUMS
+        run: |
+          cd artifacts
+          sha256sum *.zip > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/*.zip
+            artifacts/SHA256SUMS.txt
+          generate_release_notes: true
+          body: |
+            **Repository primario**: vedi link Gitea nel README.
+
+            Il mirror GitHub è generato automaticamente dal repo Gitea (sorgente di verità).
+            Per issue e PR aprire ticket sul repository primario Gitea.

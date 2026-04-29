@@ -1,0 +1,63 @@
+# Build output (src/ subdirs only — dist/ is tracked, contains pre-built DLLs)
+bin/
+obj/
+Build/
+build/
+
+# Visual Studio
+*.user
+*.suo
+*.ncb
+*.sdf
+.vs/
+ipch/
+*.VC.db
+*.VC.VC.opendb
+*.opendb
+*.aps
+*.tlog
+*.idb
+*.pdb
+*.ilk
+*.exp
+*.lib
+*.obj
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# NSIS
+*.nsh.bak
+
+# Logs
+*.log
+.logs/
+
+# Sensitive
+.env
+.env.local
+*.pem
+*.key
+
+# Migration/automation scripts (temporary, contain tokens — never commit)
+tools/t*.py
+tools/check_*.py
+tools/legacy/
