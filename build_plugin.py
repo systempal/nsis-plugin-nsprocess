@@ -168,7 +168,7 @@ def _find_msbuild_vswhere(vs_version: str) -> Optional[Tuple[Path, str, str]]:
             continue
         try:
             result = subprocess.run(
-                [str(_VSWHERE), '-version', _VS_RANGES[ver], '-latest',
+                [str(_VSWHERE), '-products', '*', '-version', _VS_RANGES[ver], '-latest',
                  '-requires', 'Microsoft.Component.MSBuild',
                  '-find', r'MSBuild\**\Bin\MSBuild.exe'],
                 capture_output=True, text=True, timeout=15,
@@ -184,17 +184,26 @@ def _find_msbuild_vswhere(vs_version: str) -> Optional[Tuple[Path, str, str]]:
     return None
 
 
+_VS_NUMERIC_FOLDER = {'2026': '18', '2022': '2022'}
+
+
 def find_msbuild(vs_version: str = 'auto') -> Optional[Tuple[Path, str, str]]:
     result = _find_msbuild_vswhere(vs_version)
     if result:
         return result
-    # Fallback: well-known paths
+    # Fallback: well-known paths (incl. BuildTools and VS2026 numeric folder)
     to_try = ['2026', '2022'] if vs_version == 'auto' else [vs_version]
     for ver in to_try:
-        for edition in ('Community', 'Professional', 'Enterprise', 'BuildTools'):
-            p = Path(rf'C:\Program Files\Microsoft Visual Studio\{ver}\{edition}\MSBuild\Current\Bin\MSBuild.exe')
-            if p.exists():
-                return p, _VS_TOOLSETS[ver], ver
+        numeric = _VS_NUMERIC_FOLDER.get(ver, ver)
+        base_paths = [
+            Path(rf'C:\Program Files (x86)\Microsoft Visual Studio\{numeric}'),
+            Path(rf'C:\Program Files\Microsoft Visual Studio\{ver}'),
+        ]
+        for base in base_paths:
+            for edition in ('Community', 'Professional', 'Enterprise', 'BuildTools'):
+                p = base / edition / 'MSBuild' / 'Current' / 'Bin' / 'MSBuild.exe'
+                if p.exists():
+                    return p, _VS_TOOLSETS[ver], ver
     return None
 
 
