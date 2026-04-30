@@ -145,8 +145,8 @@ class BuildConfig:
 
 CONFIGS = {
     'x86-ansi':    BuildConfig('x86-ansi',    'Release',         'Win32', 'x86-ansi'),
-    'x86-unicode': BuildConfig('x86-unicode',  'Release Unicode', 'Win32', 'x86-unicode'),
-    'x64-unicode': BuildConfig('x64-unicode',  'Release Unicode', 'x64',   'amd64-unicode'),
+    'x86-unicode': BuildConfig('x86-unicode',  'Release UNICODE', 'Win32', 'x86-unicode'),
+    'x64-unicode': BuildConfig('x64-unicode',  'Release UNICODE', 'x64',   'amd64-unicode'),
 }
 
 DLL_NAME     = 'nsProcess.dll'
@@ -677,4 +677,3 @@ def main() -> int:
 
 if __name__ == '__main__':
     sys.exit(main())
-

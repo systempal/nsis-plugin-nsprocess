@@ -52,7 +52,7 @@ jobs:
           "version=$v" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
       - name: Build ${{ matrix.config }}
-        run: python build_plugin.py --configs ${{ matrix.config }} --verbosity minimal
+        run: python build_plugin.py --config ${{ matrix.config }} --verbosity minimal
 
       - name: Upload DLL
         uses: actions/upload-artifact@v4

@@ -36,7 +36,7 @@ jobs:
       - uses: microsoft/setup-msbuild@v2
 
       - name: Build ${{ matrix.config }}
-        run: python build_plugin.py --configs ${{ matrix.config }}
+        run: python build_plugin.py --config ${{ matrix.config }}
 
       - name: Determine version & arch
         id: meta
