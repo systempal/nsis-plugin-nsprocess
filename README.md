@@ -155,23 +155,21 @@ Pre-compiled DLL files have been removed from the distribution:
 
 ### Build
 
-```cmd
-cd nsProcess
+```powershell
 python build_plugin.py
 ```
 
-DLLs are copied to `plugins/{platform}/nsProcess.dll`.
+DLLs are copied to `dist/{platform}/nsProcess.dll`.
 
 ### Build Options
 
 ```powershell
-python build_plugin.py --config x86-unicode      # Single architecture (x86-ansi|x86-unicode|amd64-unicode|all)
-python build_plugin.py --toolset 2026            # Specific toolset (2022|2026|auto)
-python build_plugin.py --jobs 4                  # Number of parallel MSBuild jobs (default: CPU count)
-python build_plugin.py --clean                   # Clean dist/ before build
+python build_plugin.py --configs x86-unicode       # Single architecture (x86-ansi|x86-unicode|amd64-unicode|all)
+python build_plugin.py --vs-version 2026           # Specific VS version (2022|2026|auto)
+python build_plugin.py --clean                     # Clean dist/ before build
 python build_plugin.py --install-dir "C:\NSIS\Plugins"  # Copy to additional NSIS directory
-python build_plugin.py --verbose                 # Extended MSBuild output
-python build_plugin.py --version                 # Print version and exit
+python build_plugin.py --verbosity minimal         # MSBuild verbosity (quiet|minimal|normal|detailed|diagnostic)
+python build_plugin.py --final                     # Force rebuild + clean (pre-release build)
 ```
 
 ### Functional Changes
